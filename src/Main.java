@@ -1,53 +1,48 @@
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-
-        while (true){menu();}
-
-
+        while (true) {
+            menu();
+        }
     }
 
     public static void menu() throws IOException {
         String input = "input.txt";
-        String compressed = "Compressed File.txt";
-        String decoded = "Decompressed file.txt";
-
         String filename;
         Scanner sc = new Scanner(System.in);
 
-        //filename = "input.txt";
         System.out.println("**********************");
         System.out.println("      Main  Menu      ");
         System.out.println("**********************");
-        System.out.print("Enter File Name (Enter 0 to Exit):");
+
+        System.out.print("\nEnter File Name (Enter 0 to Exit):");
         filename = sc.nextLine();
-        if(filename.equals("0"))
+
+        if (filename.equals("0"))
             System.exit(0);
         File file = new File(filename);
-        if (!file.exists()){
+        if (!file.exists()) {
             System.err.println("File does not exist!");
             return;
         }
 
 
         System.out.println("\nChoose an option to continue: ");
-        System.out.println("1. Compress a file ");
-        System.out.println("2. Decompress a file ");
+        System.out.println("1. Compress file ");
+        System.out.println("2. Decompress file ");
         System.out.println("3. Exit ");
         System.out.print("Please enter your choice: ");
 
 
         int choice;
         choice = sc.nextInt();
-        switch (choice){
+
+        switch (choice) {
+
             case 1:
                 String str = FileHandler.readFile(input);
                 Node root = buildHuffmanTree(str);
@@ -64,27 +59,29 @@ public class Main {
                 System.out.print("Compression Ratio = ");
                 System.out.print(String.format("%,.3f ", compressionRatio));
                 System.out.println("%\n");
-
-
                 break;
+
             case 2:
                 long DecompressionTime = System.nanoTime();
                 Decompress(filename);
                 DecompressionTime = System.nanoTime() - DecompressionTime;
                 System.out.println("Total execution time: " + DecompressionTime / 1000000 + "ms\n");
                 break;
+
             case 3:
                 System.exit(0);
                 break;
+
             default:
-                System.err.println("invalid input");
+                System.err.println("Invalid input");
         }
 
     }
 
-    public static void Compress(String fileContent) throws IOException {
+    public static void Compress(String fileContent) {
         buildHuffmanTree(fileContent);
     }
+
     public static void Decompress(String filename) throws IOException {
         Decompression.DecompressFile(filename);
     }
@@ -112,7 +109,7 @@ public class Main {
             Queue.add(node);
         });
 
-        Node root = new Node();
+        Node root;
         while (Queue.size() > 1) {
             Node n1 = Queue.poll();
             Node n2 = Queue.poll();
@@ -125,7 +122,6 @@ public class Main {
         }
         root = Queue.peek();
 
-        //System.out.println(Queue.peek().frequency);
         return root;
     }
 

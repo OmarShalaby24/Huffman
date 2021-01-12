@@ -4,13 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Decompression {
-/*
 
-
-
-
-*/
     public static void DecompressFile(String filename) throws IOException {
+
         filename = "Compressed file.txt";
         File file = new File(filename);
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "ISO-8859-1"));
@@ -28,34 +24,22 @@ public class Decompression {
         for (int i = 0; i < hashMapSize; i++) {
             String value = new String(new char[]{(char) br.read()});
             String key = br.readLine();
-//            System.out.println(key + " " + value);
             decodings.put(key, value);
         }
 
-        //System.out.println(zeroPadding + "\n" + hashMapSize);
-        for (Map.Entry<String, String> entry : decodings.entrySet()) {
-            //System.out.println(entry.getKey() + "=" + entry.getValue());
-        }
 
         StringBuilder binary = new StringBuilder();
-        char cd = 'd';
-        //        String ascii = "";
+        char character;
+
         while (br.ready()) {
-            cd = (char) br.read();
-//            System.out.println(cd);
-            line = new String(new char[]{cd});
-//            ascii += line;
-//            System.out.println(ascii);
+            character = (char) br.read();
+            line = new String(new char[]{character});
             binary.append(AsciiToBinary(line));
-            //System.out.println(line);
         }
 
-        //System.out.println(binary);
 
         if (zeroPadding > 0) {
-
             binary = binary.delete(binary.length() - zeroPadding, binary.length());
-            //System.out.println(binary);
         }
 
 
@@ -65,24 +49,16 @@ public class Decompression {
         }
         Writer outputStream = new OutputStreamWriter(new FileOutputStream(f.getName(), false));
 
-        //System.out.println(binary);
         int i = 0;
         char c = binary.charAt(i);
-        String out;
+        String result;
         String key = "";
         while (i < binary.length()) {
             key += c;
             if (decodings.containsKey(key)) {
-                if (decodings.get(key).equals("\\n"))
-                    out = "\n";
-                else if (decodings.get(key).equals("\\r")) {
-                    out = "";
-                } else {
-                    out = decodings.get(key);
-                }
-                //System.out.print(out);
-                //System.out.println(key+" = "+out);
-                outputStream.write(out);
+
+                result = decodings.get(key);
+                outputStream.write(result);
                 key = "";
             }
 
@@ -113,7 +89,5 @@ public class Decompression {
         }
         return binary.toString();
     }
-    //001110111110011011011100111110110011100101010110001110100101000011000111
-    //001110111110011011011100111110110011100101010110001110100101000011000111
-    //001110111110011011011100111110110011100101010110001110100101000011000111
+
 }
