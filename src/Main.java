@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,8 +27,15 @@ public class Main {
         System.out.println("**********************");
         System.out.println("      Main  Menu      ");
         System.out.println("**********************");
-        System.out.print("Enter File Name:");
+        System.out.print("Enter File Name (Enter 0 to Exit):");
         filename = sc.nextLine();
+        if(filename.equals("0"))
+            System.exit(0);
+        File file = new File(filename);
+        if (!file.exists()){
+            System.err.println("File does not exist!");
+            return;
+        }
 
 
         System.out.println("\nChoose an option to continue: ");
@@ -41,15 +49,29 @@ public class Main {
         choice = sc.nextInt();
         switch (choice){
             case 1:
-
                 String str = FileHandler.readFile(input);
                 Node root = buildHuffmanTree(str);
                 char[] characters = str.toCharArray();
+                long CompressionTime = System.nanoTime();
                 Compression.compressFile(root, characters);
                 Compress(str);
+                CompressionTime = System.nanoTime() - CompressionTime;
+                System.out.println("Total execution time: " + CompressionTime / 1000000 + "ms");
+                double originalFileLength = str.length();
+                File compressedFile = new File("Compressed File.txt");
+                double compressedFileLength = compressedFile.length();
+                double compressionRatio = (compressedFileLength / originalFileLength) * 100;
+                System.out.print("Compression Ratio = ");
+                System.out.print(String.format("%,.3f ", compressionRatio));
+                System.out.println("%\n");
+
+
                 break;
             case 2:
+                long DecompressionTime = System.nanoTime();
                 Decompress(filename);
+                DecompressionTime = System.nanoTime() - DecompressionTime;
+                System.out.println("Total execution time: " + DecompressionTime / 1000000 + "ms\n");
                 break;
             case 3:
                 System.exit(0);
@@ -78,7 +100,7 @@ public class Main {
                 HashFreq.put(c, 1);
             }
         }
-        //System.out.println(HashFreq);
+
         PriorityQueue<Node> Queue = new PriorityQueue<>(HashFreq.size() + 1, new MyComparator());
 
         HashFreq.entrySet().forEach(entry -> {
@@ -106,6 +128,5 @@ public class Main {
         //System.out.println(Queue.peek().frequency);
         return root;
     }
-
 
 }

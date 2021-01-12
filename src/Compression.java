@@ -28,7 +28,11 @@ public class Compression {
         Map<Character, String> HuffCodes = new HashMap<>();
         encode(root, "", HuffCodes);
         // Print the Huffman codes
-        //System.out.println("Huffman Codes are: " + HuffCodes);
+        for (Map.Entry<Character, String> entry : HuffCodes.entrySet()) {
+
+            System.out.println(entry.getKey() + "=" + entry.getValue());
+        }
+
 
         // Print encoded string
         StringBuilder encodedString = new StringBuilder();

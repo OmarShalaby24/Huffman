@@ -4,6 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Decompression {
+/*
+
+
+
+
+*/
     public static void DecompressFile(String filename) throws IOException {
         filename = "Compressed file.txt";
         File file = new File(filename);
